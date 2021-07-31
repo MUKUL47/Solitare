@@ -17,12 +17,16 @@ export class Gameboard extends React.Component {
 
   componentDidUpdate(prev) {
     if (prev.reset !== this.props.reset) {
-      this.setState({ solitare: new Solitare().initialize() });
+      this.setState({
+        solitare: new Solitare().initialize(),
+        selectedDeckInfo: {},
+      });
     }
   }
 
   deckClicked(cards, index, type, e, deckIndex) {
     // //console.log(cards, index, type);
+    e?.preventDefault();
     if (type === "DECK" && !this.state.selectedDeckInfo?.deck) {
       this.setState({ solitare: this.state.solitare.deckToDeckExpose() });
     } else if (!this.state.selectedDeckInfo?.deck) {
@@ -52,7 +56,10 @@ export class Gameboard extends React.Component {
           oldDeck.deck,
           oldDeck.deckIndex === deckIndex
         );
-        if (!solitare) return;
+        if (!solitare) {
+          this.resetCardInHard();
+          return;
+        }
         this.setState({
           solitare: solitare.exposeTopDeck(oldDeck.deckIndex),
           selectedDeckInfo: {},
@@ -83,7 +90,10 @@ export class Gameboard extends React.Component {
         oldDeck.deck,
         oldDeck.deckIndex === index
       );
-      if (!solitare) return;
+      if (!solitare) {
+        this.resetCardInHard();
+        return;
+      }
       this.setState({
         solitare: solitare.exposeTopDeck(oldDeck.deckIndex),
         selectedDeckInfo: {},
@@ -91,14 +101,35 @@ export class Gameboard extends React.Component {
     }
   }
 
-  deckTarget(...args) {
-    //console.log("TARGET-", args);
-    //console.log("DECK-", this.state.selectedDeckInfo);
+  resetCardInHard() {
+    // if (e.which === 2) {
+    if (this.state.selectedDeckInfo?.deck) {
+      const oldDeck = { ...this.state.selectedDeckInfo };
+      if (this.state.selectedDeckInfo.type === "BOARD") {
+        const solitare = this.state.solitare.appendNewCardsToBoard(
+          oldDeck.deckIndex,
+          oldDeck.deck,
+          true
+        );
+        if (!solitare) return;
+        this.setState({
+          solitare: solitare,
+          selectedDeckInfo: {},
+        });
+      } else {
+        //from deck
+        this.setState({
+          solitare: this.state.solitare.deckToDeckExpose(oldDeck.deck[0]),
+          selectedDeckInfo: {},
+        });
+      }
+    }
+    // }
   }
 
   componentDidMount() {
-    this.gameboardRef.current.addEventListener("mousemove", (e) => {
-      if (this.state.selectedDeckInfo.deck) {
+    document.addEventListener("mousemove", (e) => {
+      if (this.deckInHandRef.current) {
         this.deckInHandRef.current.style.top = `${e.clientY}px`;
         this.deckInHandRef.current.style.left = `${e.clientX + 10}px`;
       }
@@ -117,7 +148,10 @@ export class Gameboard extends React.Component {
         oldDeck.deck[oldDeck.deck.length - 1],
         deckIndex
       );
-      if (!solitare) return;
+      if (!solitare) {
+        this.resetCardInHard();
+        return;
+      }
       this.setState({
         solitare: solitare.exposeTopDeck(oldDeck.deckIndex),
         selectedDeckInfo: {},
@@ -171,12 +205,12 @@ export class Gameboard extends React.Component {
       }
     );
     return (
-      <div className="game-board" data={1} ref={this.gameboardRef}>
+      <div className="game-board" data={1}>
         {this.state.selectedDeckInfo.deck && (
           <div className="deck-in-hand" ref={this.deckInHandRef}>
             <Deck
               data={this.state.selectedDeckInfo.deck}
-              deckClicked={this.deckTarget.bind(this)}
+              deckClicked={() => null}
             />
           </div>
         )}

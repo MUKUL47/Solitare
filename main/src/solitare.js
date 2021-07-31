@@ -9,8 +9,7 @@ export class Solitare {
   //
   cardConsidered = [];
   cardsConsidered = 1;
-  black_cards = ["spades", "clubs"];
-  red_cards = ["diamonds", "hearts"];
+  colorMap = { spades: 0, clubs: 0, diamonds: 1, hearts: 1 };
   ranking = {
     ace: 1,
     2: 2,
@@ -64,7 +63,11 @@ export class Solitare {
     if (!exception) {
       if (column.length === 0 && cards[0].rank !== "king") return false;
       //red-black vice-versa
-      if (column[column.length - 1]?.type === cards?.[0].type) return false;
+      if (
+        this.colorMap[column[column.length - 1]?.type] ===
+        this.colorMap[cards?.[0].type]
+      )
+        return false;
       //ranking
       if (
         column.length > 0 &&
