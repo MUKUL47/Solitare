@@ -2,4 +2,4 @@
 
 ### [Play Now](https://mukul47.github.io/Solitare/index.html)
 
-<img src="https://github.com/MUKUL47/Solitare/solitare.png" />
+<img src="https://github.com/MUKUL47/Solitare/blob/main/solitare.png" />
