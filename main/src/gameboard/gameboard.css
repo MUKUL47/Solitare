@@ -1,0 +1,74 @@
+.game-board {
+  /* width: calc(100vw - 4rem);
+  height: calc(100vh - 4rem); */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+}
+.game-board_header,
+.deck-stash,
+.aces,
+.game-board_play {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.decks,
+.decks-exposed,
+.aces > div,
+.board-area,
+.deck-in-hand {
+  width: 120px;
+  height: 160px;
+  border: 1px solid rgba(136, 136, 136, 0.527);
+  border-radius: 10px;
+  position: relative;
+}
+.deck-in-hand {
+  border: none;
+  z-index: 9999999;
+  position: absolute;
+}
+img {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.decks > p {
+  content: "Reset Deck";
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
+}
+.game-board_play {
+  justify-content: flex-start !important;
+  gap: 1rem;
+  border-top: 1px solid #8885;
+  padding-top: 2rem;
+}
+.gameboard-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  z-index: 999999;
+  background: #88888869;
+}
+.aces > div > p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 2.5rem;
+  height: 100%;
+  user-select: none;
+  cursor: pointer;
+}
